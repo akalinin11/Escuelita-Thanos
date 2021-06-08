@@ -25,7 +25,7 @@ data Universoo = UnaUniverso {
     poblacion :: [Personaje]
 } deriving (Show,Eq)
  
---Dos opciones 
+--Dos opciones  Me quedo con esta
 type Universo = [Personaje]
 
 --Personajes ejemplos---------------------
