@@ -65,9 +65,11 @@ guanteleteCompleto = UnGuantelete{
 
 
 chasquearGuantelete :: Guantelete->Universo->Universo
-chasquearGuantelete aGuantelete aUniverso | ((6==).length.gemas) aGuantelete && (("uru"==) .material) aGuantelete = eliminarPoblacion aUniverso
+chasquearGuantelete aGuantelete aUniverso | puedoChasquear aGuantelete = eliminarPoblacion aUniverso
                                           | otherwise = aUniverso
 
+puedoChasquear :: Guantelete->Bool
+puedoChasquear aGuantelete = ((6==).length.gemas) aGuantelete && (("uru"==) .material) aGuantelete
 
 eliminarPoblacion :: Universo->Universo
 eliminarPoblacion aUniverso =  drop (cantidadAEliminar  aUniverso) (reverse aUniverso)
@@ -209,17 +211,26 @@ utilizar gemas aPersonaje = map (utilizarPoderGema aPersonaje) gemas
 
 --Punto 6
 
---gemaMasPoderosa :: Guantelete->Personaje->Gema
---gemaMasPoderosa (primerGema : gemas) aPersonaje | (energia.primerGema )aPersonaje > energia aPersonaje=  primerGema
-                                           --     | otherwise = primerGema
+gemaMasPoderosa :: Personaje->Guantelete->Gema
+gemaMasPoderosa aPersonaje guantelete = gemaDeMayorPoder aPersonaje  (gemas guantelete)
+
+gemaDeMayorPoder :: Personaje->[Gema]->Gema
+gemaDeMayorPoder _ [gema] = gema
+
+gemaDeMayorPoder aPersonaje (gema1:gema2:gemas) 
+                  | (energia.utilizarPoderGema aPersonaje) gema1  > (energia.utilizarPoderGema  aPersonaje) gema2 = gemaDeMayorPoder aPersonaje (gema2:gemas)
+                  | otherwise = gemaDeMayorPoder aPersonaje (gema1:gemas) 
 
 
-gemasMasPoderosa :: Personaje->[Gema]->Gema
-gemasMasPoderosa aPersonaje gemas = maximoSegun ( energia. (utilizarPoderGema aPersonaje)) gemas
+
+------------OTRA FORMA--------------------------------
+
+gemaMasPoderosa'' :: Personaje->Guantelete->Gema
+gemaMasPoderosa'' aPersonaje guantelete = maximoSegun ( energia. (utilizarPoderGema aPersonaje)) (gemas guantelete)
 
 --pasas dose gemas a la funcion menorSegun para ahi poder realziar la comparacion, se devuelve la q disminuye mas energia para luego comparara con la siguiente gema
 maximoSegun :: Ord b => (a->b)->[a]->a
-maximoSegun f = foldl1 (mayorSegun f) 
+maximoSegun f = foldl1 (menorSegun f) 
 
 
 --Te vas quedando con la gema que deja con menos energia
@@ -228,6 +239,7 @@ menorSegun f a b
   | f a < f b = a
   | otherwise = b
 
+------------------------------------------------
 
 -- Punto 7)
 --a) NO se puede ya que es una lista infinita y haskell no puede evaluar todas las gemas, no termina mas la evaluacion
