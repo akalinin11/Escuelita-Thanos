@@ -1,3 +1,3 @@
-# Proyecto Base
+# Escuelita Thanos
 
-Reemplazar por alguna descripción del proyecto.
+i am not inevitable
