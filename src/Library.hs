@@ -105,7 +105,7 @@ personasConMasDeUnaHabilidad :: Universo->Universo
 personasConMasDeUnaHabilidad = filter (tenerMasHabilidad 1 )  
 
 tenerMasHabilidad :: Number->Personaje->Bool
-tenerMasHabilidad n = (>1) . length. habilidades
+tenerMasHabilidad n = (>n) . length. habilidades
 
 
 ---------------------Segunda Parte------------------------------
